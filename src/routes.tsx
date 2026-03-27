@@ -7,10 +7,10 @@ import SignIn from "./pages/SignIn";
 import Users from "./pages/Users";
 import UserEdit, { userLoader, newUserLoader } from "./pages/UserEdit";
 
-function ProtectedRoute({ children }) {
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated } = useAuth();
   if (!isAuthenticated) return <Navigate to="/signin" replace />;
-  return children;
+  return <>{children}</>;
 }
 
 const router = createBrowserRouter([

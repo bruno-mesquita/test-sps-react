@@ -1,17 +1,24 @@
 import React, { createContext, useCallback, useContext, useEffect, useState } from "react";
 import axios from "axios";
 
-const AuthContext = createContext(null);
+interface AuthContextType {
+  token: string | null
+  isAuthenticated: boolean
+  signIn: (token: string) => void
+  signOut: () => void
+}
 
-export function AuthProvider({ children }) {
-  const [token, setToken] = useState(() => localStorage.getItem("token"));
+const AuthContext = createContext<AuthContextType | null>(null);
+
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [token, setToken] = useState<string | null>(() => localStorage.getItem("token"));
 
   const signOut = useCallback(() => {
     localStorage.removeItem("token");
     setToken(null);
   }, []);
 
-  const signIn = useCallback((newToken) => {
+  const signIn = useCallback((newToken: string) => {
     localStorage.setItem("token", newToken);
     setToken(newToken);
   }, []);
@@ -25,7 +32,7 @@ export function AuthProvider({ children }) {
 
     const resId = axios.interceptors.response.use(
       (response) => response,
-      (error) => {
+      (error: { response?: { status: number } }) => {
         if (error.response?.status === 401) signOut();
         return Promise.reject(error);
       }
@@ -44,6 +51,8 @@ export function AuthProvider({ children }) {
   );
 }
 
-export function useAuth() {
-  return useContext(AuthContext);
+export function useAuth(): AuthContextType {
+  const ctx = useContext(AuthContext);
+  if (!ctx) throw new Error("useAuth must be used within AuthProvider");
+  return ctx;
 }
