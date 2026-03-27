@@ -13,7 +13,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Loader2 } from "lucide-react";
+import { Loader2, Info } from "lucide-react";
 
 function SignIn() {
   const [email, setEmail] = useState("");
@@ -53,6 +53,13 @@ function SignIn() {
           <h1 className="text-2xl font-bold tracking-tight">SPS React</h1>
           <p className="text-muted-foreground text-sm mt-1">Acesse sua conta</p>
         </div>
+        <Alert className="text-sm">
+          <Info className="h-4 w-4" />
+          <AlertDescription>
+            O backend está hospedado em um servidor gratuito e pode ficar inativo por falta de uso.
+            O primeiro login pode levar até <strong>50 segundos</strong> enquanto o servidor inicializa.
+          </AlertDescription>
+        </Alert>
         <Card>
           <CardHeader>
             <CardTitle className="text-xl">Entrar</CardTitle>
