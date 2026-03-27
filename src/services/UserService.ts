@@ -1,23 +1,27 @@
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
+import api from "@/lib/api";
 import { User } from "@/types";
-
-const BASE = import.meta.env.VITE_SERVER_URL;
 
 class UserService {
   list(): Promise<AxiosResponse<User[]>> {
-    return axios.get(`${BASE}/users`);
+    return api.get(`/users`);
   }
   get(id: number): Promise<AxiosResponse<User>> {
-    return axios.get(`${BASE}/users/${id}`);
+    return api.get(`/users/${id}`);
   }
-  create(data: Omit<User, "id">): Promise<AxiosResponse<User>> {
-    return axios.post(`${BASE}/users`, data);
+  create(
+    data: Omit<User, "id"> & { password: string },
+  ): Promise<AxiosResponse<User>> {
+    return api.post(`/users`, data);
   }
-  update(id: number, data: Omit<User, "id">): Promise<AxiosResponse<User>> {
-    return axios.put(`${BASE}/users/${id}`, data);
+  update(
+    id: number,
+    data: Omit<User, "id"> & { password?: string },
+  ): Promise<AxiosResponse<User>> {
+    return api.put(`/users/${id}`, data);
   }
   delete(id: number): Promise<AxiosResponse<void>> {
-    return axios.delete(`${BASE}/users/${id}`);
+    return api.delete(`/users/${id}`);
   }
 }
 
