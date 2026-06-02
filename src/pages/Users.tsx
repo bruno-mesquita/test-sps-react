@@ -6,6 +6,7 @@ import { User } from "@/types";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -17,6 +18,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import {
   UserPlus,
   LogOut,
@@ -30,6 +32,7 @@ function Users() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [photoUser, setPhotoUser] = useState<User | null>(null);
 
   const { signOut } = useAuth();
   const navigate = useNavigate();
@@ -97,11 +100,28 @@ function Users() {
                     key={user.id}
                     className="flex items-center justify-between px-4 py-3"
                   >
-                    <div>
-                      <p className="font-medium text-foreground">{user.name}</p>
-                      <p className="text-sm text-muted-foreground">
-                        {user.email}
-                      </p>
+                    <div className="flex items-center gap-3">
+                      <button
+                        type="button"
+                        onClick={() => user.originalUrl && setPhotoUser(user)}
+                        className={cn("focus:outline-none", user.originalUrl && "cursor-pointer")}
+                        disabled={!user.originalUrl}
+                      >
+                        <Avatar>
+                          {user.previewUrl && (
+                            <AvatarImage src={user.previewUrl} alt={user.name} />
+                          )}
+                          <AvatarFallback>
+                            {user.name.charAt(0).toUpperCase()}
+                          </AvatarFallback>
+                        </Avatar>
+                      </button>
+                      <div>
+                        <p className="font-medium text-foreground">{user.name}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {user.email}
+                        </p>
+                      </div>
                     </div>
                     <div className="flex items-center gap-2">
                       <Link
@@ -150,6 +170,18 @@ function Users() {
           </div>
         )}
       </main>
+
+      <Dialog open={photoUser !== null} onOpenChange={(open) => !open && setPhotoUser(null)}>
+        <DialogContent className="sm:max-w-lg">
+          {photoUser && (
+            <img
+              src={photoUser.originalUrl}
+              alt={photoUser.name}
+              className="w-full rounded-lg object-contain max-h-[70vh]"
+            />
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

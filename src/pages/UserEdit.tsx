@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import api from "@/lib/api";
-import UserService from "@/services/UserService";
 import { User } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,7 +14,8 @@ import {
 } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ArrowLeft, Loader2 } from "lucide-react";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { ArrowLeft, Loader2, Camera } from "lucide-react";
 
 interface LoaderData {
   user: User | null;
@@ -44,8 +44,20 @@ function UserEdit() {
   const [email, setEmail] = useState(isNew ? "" : user!.email);
   const [password, setPassword] = useState("");
   const [isAdmin, setIsAdmin] = useState(!isNew && user!.type === "admin");
+  const [photo, setPhoto] = useState<File | null>(null);
+  const [photoPreview, setPhotoPreview] = useState<string | null>(
+    isNew ? null : (user!.previewUrl ?? null)
+  );
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setPhoto(file);
+    setPhotoPreview(URL.createObjectURL(file));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,15 +65,17 @@ function UserEdit() {
     setLoading(true);
     try {
       const type = isAdmin ? "admin" : "user";
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("email", email);
+      formData.append("type", type);
+      if (password) formData.append("password", password);
+      if (photo) formData.append("photo", photo);
+
       if (isNew) {
-        await UserService.create({ name, email, password, type });
+        await api.post("/users", formData);
       } else {
-        await UserService.update(user!.id, {
-          name,
-          email,
-          type,
-          ...(password ? { password } : {}),
-        });
+        await api.put(`/users/${user!.id}`, formData);
       }
       navigate("/users");
     } catch (err) {
@@ -108,6 +122,31 @@ function UserEdit() {
               </Alert>
             )}
             <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="flex flex-col items-center gap-2">
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handlePhotoChange}
+                />
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="relative group focus:outline-none"
+                >
+                  <Avatar size="lg" className="size-20 cursor-pointer">
+                    {photoPreview && <AvatarImage src={photoPreview} alt={name} />}
+                    <AvatarFallback>
+                      {name ? name.charAt(0).toUpperCase() : "?"}
+                    </AvatarFallback>
+                  </Avatar>
+                  <span className="absolute inset-0 flex items-center justify-center rounded-full bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <Camera className="h-5 w-5 text-white" />
+                  </span>
+                </button>
+                <span className="text-xs text-muted-foreground">Clique para alterar foto</span>
+              </div>
               <div className="space-y-2">
                 <Label htmlFor="name">Nome</Label>
                 <Input

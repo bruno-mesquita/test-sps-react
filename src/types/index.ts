@@ -3,4 +3,6 @@ export interface User {
   name: string
   email: string
   type: 'admin' | 'user'
+  originalUrl?: string
+  previewUrl?: string
 }
