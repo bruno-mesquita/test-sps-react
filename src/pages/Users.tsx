@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import UserService from "@/services/UserService";
+import api from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
 import { User } from "@/types";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -25,6 +26,7 @@ import {
   Pencil,
   Trash2,
   Loader2,
+  Paperclip,
   Users as UsersIcon,
 } from "lucide-react";
 
@@ -39,7 +41,15 @@ function Users() {
 
   useEffect(() => {
     UserService.list()
-      .then((res) => setUsers(res.data))
+      .then(async (res) => {
+        const users = res.data;
+        const attachmentLists = await Promise.all(
+          users.map((u) =>
+            api.get(`/users/${u.id}/attachments`).then((r) => r.data).catch(() => [])
+          )
+        );
+        setUsers(users.map((u, i) => ({ ...u, attachments: attachmentLists[i] })));
+      })
       .catch(() => setError("Falha ao carregar usuários."))
       .finally(() => setLoading(false));
   }, []);
@@ -121,6 +131,12 @@ function Users() {
                         <p className="text-sm text-muted-foreground">
                           {user.email}
                         </p>
+                        {(user.attachments?.length ?? 0) > 0 && (
+                          <p className="flex items-center gap-1 text-xs text-muted-foreground">
+                            <Paperclip className="h-3 w-3" />
+                            {user.attachments!.length} anexo{user.attachments!.length !== 1 ? "s" : ""}
+                          </p>
+                        )}
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
