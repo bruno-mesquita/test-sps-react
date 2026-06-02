@@ -67,6 +67,12 @@ function UserEdit() {
     setPhotoPreview(URL.createObjectURL(file));
   };
 
+  const removePhoto = async () => {
+    await api.delete(`/users/${user!.id}/photo`);
+    setPhoto(null);
+    setPhotoPreview(null);
+  };
+
   const MAX_ATTACHMENTS = 5;
 
   const handleAttachmentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -177,6 +183,14 @@ function UserEdit() {
                   <span className="absolute inset-0 flex items-center justify-center rounded-full bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity">
                     <Camera className="h-5 w-5 text-white" />
                   </span>
+                  {!isNew && photoPreview && (
+                    <span
+                      className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-destructive text-destructive-foreground"
+                      onClick={(e) => { e.stopPropagation(); removePhoto(); }}
+                    >
+                      <X className="h-3 w-3" />
+                    </span>
+                  )}
                 </button>
                 <span className="text-xs text-muted-foreground">Clique para alterar foto</span>
               </div>
