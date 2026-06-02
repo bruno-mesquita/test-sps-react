@@ -1,3 +1,9 @@
+export interface UserAttachment {
+  id: number
+  filename: string
+  url: string
+}
+
 export interface User {
   id: number
   name: string
@@ -5,4 +11,5 @@ export interface User {
   type: 'admin' | 'user'
   originalUrl?: string
   previewUrl?: string
+  attachments?: UserAttachment[]
 }
