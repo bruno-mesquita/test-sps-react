@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import SignIn from "./pages/SignIn";
 import Users from "./pages/Users";
 import UserEdit, { userLoader, newUserLoader } from "./pages/UserEdit";
+import AttachmentViewer from "./pages/AttachmentViewer";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated } = useAuth();
@@ -47,6 +48,14 @@ const router = createBrowserRouter([
       </ProtectedRoute>
     ),
     loader: userLoader,
+  },
+  {
+    path: "/users/:userId/attachments/:attachmentId",
+    element: (
+      <ProtectedRoute>
+        <AttachmentViewer />
+      </ProtectedRoute>
+    ),
   },
 ]);
 

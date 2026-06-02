@@ -237,14 +237,17 @@ function UserEdit() {
                 {existingAttachments.map((att) => (
                   <div key={att.id} className="flex items-center gap-2 rounded-md border px-3 py-2 text-sm">
                     <FileText className="h-4 w-4 shrink-0 text-muted-foreground" />
-                    <a
-                      href={att.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex-1 truncate text-primary underline-offset-4 hover:underline"
+                    <button
+                      type="button"
+                      onClick={() =>
+                        navigate(`/users/${user!.id}/attachments/${att.id}`, {
+                          state: { filename: att.filename, url: att.url },
+                        })
+                      }
+                      className="flex-1 truncate text-left text-primary underline-offset-4 hover:underline"
                     >
                       {att.filename}
-                    </a>
+                    </button>
                     <button
                       type="button"
                       onClick={() => deleteExistingAttachment(att.id)}
