@@ -105,10 +105,10 @@ function Users() {
               </div>
             ) : (
               <ul className="divide-y">
-                {users.map((user) => (
+                {users.map((user, index) => (
                   <li
                     key={user.id}
-                    className="flex items-center justify-between px-4 py-3"
+                    className={`flex items-center justify-between px-4  py-3 ${index % 2 === 0 ? 'bg-muted' : ''}` }
                   >
                     <div className="flex items-center gap-3">
                       <button
