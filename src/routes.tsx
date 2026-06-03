@@ -5,7 +5,8 @@ import { useAuth } from "./context/AuthContext";
 import Home from "./pages/Home";
 import SignIn from "./pages/SignIn";
 import Users from "./pages/Users";
-import UserEdit, { userLoader, newUserLoader } from "./pages/UserEdit";
+import UserCreate, { newUserLoader } from "./pages/UserCreate";
+import UserEdit, { userLoader } from "./pages/UserEdit";
 import AttachmentViewer from "./pages/AttachmentViewer";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -35,7 +36,7 @@ const router = createBrowserRouter([
     path: "/users/new",
     element: (
       <ProtectedRoute>
-        <UserEdit />
+        <UserCreate />
       </ProtectedRoute>
     ),
     loader: newUserLoader,

@@ -1,6 +1,8 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Download, FileText } from "lucide-react";
+import { Download, FileText } from "lucide-react";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
 
 interface AttachmentState {
   filename: string;
@@ -27,7 +29,6 @@ function AttachmentViewer() {
       <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-4">
         <p className="text-muted-foreground">Anexo não encontrado.</p>
         <Button variant="outline" onClick={goBack}>
-          <ArrowLeft className="mr-2 h-4 w-4" />
           Voltar
         </Button>
       </div>
@@ -37,25 +38,18 @@ function AttachmentViewer() {
   const { filename, url } = state;
   const fileType = getFileType(filename);
 
+  const downloadAction = (
+    <a href={url} download={filename}>
+      <Button variant="outline" size="sm">
+        <Download className="mr-2 h-4 w-4" />
+        Baixar
+      </Button>
+    </a>
+  );
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <header className="border-b bg-card">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between gap-3">
-          <div className="flex items-center gap-3 min-w-0">
-            <Button variant="ghost" size="icon" onClick={goBack}>
-              <ArrowLeft className="h-5 w-5" />
-            </Button>
-            <h1 className="text-xl font-semibold truncate">{filename}</h1>
-          </div>
-          <a href={url} download={filename}>
-            <Button variant="outline" size="sm">
-              <Download className="mr-2 h-4 w-4" />
-              Baixar
-            </Button>
-          </a>
-        </div>
-      </header>
-
+      <Header title={filename} onBack={goBack} actions={downloadAction} />
       <main className="flex-1 container mx-auto px-4 py-8 flex flex-col items-center">
         {fileType === "image" && (
           <img
@@ -87,6 +81,7 @@ function AttachmentViewer() {
           </div>
         )}
       </main>
+      <Footer />
     </div>
   );
 }
