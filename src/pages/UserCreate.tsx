@@ -3,7 +3,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import UserForm, { UserFormValues } from "@/components/users/UserForm";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { useCreateUser } from "@/hooks/useUserMutations";
+import { useCreateUser } from "@/hooks/useCreateUser";
 
 function UserCreate() {
   const navigate = useNavigate();

@@ -7,7 +7,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import UsersTable from "@/components/users/UsersTable";
 import { useUsers } from "@/hooks/useUsers";
-import { useDeleteUser } from "@/hooks/useUserMutations";
+import { useDeleteUser } from "@/hooks/useDeleteUser";
 
 function Users() {
   const { data: users = [], isLoading, isError, isFetching, refetch } = useUsers();

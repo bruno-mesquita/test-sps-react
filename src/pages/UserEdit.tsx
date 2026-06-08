@@ -6,7 +6,10 @@ import UserForm, { UserFormValues } from "@/components/users/UserForm";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
 import { useUser } from "@/hooks/useUsers";
-import { useUpdateUser, useRemovePhoto, useDeleteAttachment, useUploadAttachments } from "@/hooks/useUserMutations";
+import { useUpdateUser } from "@/hooks/useUpdateUser";
+import { useRemovePhoto } from "@/hooks/useRemovePhoto";
+import { useDeleteAttachment } from "@/hooks/useDeleteAttachment";
+import { useUploadAttachments } from "@/hooks/useUploadAttachments";
 
 function UserEdit() {
   const { userId } = useParams<{ userId: string }>();
