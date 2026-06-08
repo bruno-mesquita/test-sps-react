@@ -51,8 +51,8 @@ interface UserFormProps {
   loading?: boolean;
   error?: string | null;
   onCancel?: () => void;
-  onRemovePhoto?: () => Promise<void>;
-  onDeleteAttachment?: (id: number) => Promise<void>;
+  onRemovePhoto?: () => Promise<unknown>;
+  onDeleteAttachment?: (id: number) => Promise<unknown>;
   onNavigateToAttachment?: (att: UserAttachment) => void;
 }
 

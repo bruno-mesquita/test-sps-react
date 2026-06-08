@@ -1,18 +1,28 @@
-import React from "react";
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
+import { queryClient } from "./lib/queryClient";
+import { userKeys, fetchUser, fetchUserAttachments } from "./queries/users";
 
 import Home from "./pages/Home";
 import SignIn from "./pages/SignIn";
 import Users from "./pages/Users";
-import UserCreate, { newUserLoader } from "./pages/UserCreate";
-import UserEdit, { userLoader } from "./pages/UserEdit";
+import UserCreate from "./pages/UserCreate";
+import UserEdit from "./pages/UserEdit";
 import AttachmentViewer from "./pages/AttachmentViewer";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated } = useAuth();
   if (!isAuthenticated) return <Navigate to="/signin" replace />;
   return <>{children}</>;
+}
+
+async function userEditLoader({ params }: { params: Record<string, string | undefined> }) {
+  const id = Number(params.userId);
+  await Promise.all([
+    queryClient.prefetchQuery({ queryKey: userKeys.detail(id), queryFn: () => fetchUser(id) }),
+    queryClient.prefetchQuery({ queryKey: userKeys.attachments(id), queryFn: () => fetchUserAttachments(id) }),
+  ]);
+  return null;
 }
 
 const router = createBrowserRouter([
@@ -39,7 +49,6 @@ const router = createBrowserRouter([
         <UserCreate />
       </ProtectedRoute>
     ),
-    loader: newUserLoader,
   },
   {
     path: "/users/:userId",
@@ -48,7 +57,7 @@ const router = createBrowserRouter([
         <UserEdit />
       </ProtectedRoute>
     ),
-    loader: userLoader,
+    loader: userEditLoader,
   },
   {
     path: "/users/:userId/attachments/:attachmentId",

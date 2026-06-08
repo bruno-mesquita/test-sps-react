@@ -29,7 +29,7 @@ import { Pencil, Trash2, Paperclip } from "lucide-react";
 
 interface UsersTableProps {
   users: User[];
-  onDelete: (id: number) => Promise<void>;
+  onDelete: (id: number) => void;
 }
 
 function UsersTable({ users, onDelete }: UsersTableProps) {

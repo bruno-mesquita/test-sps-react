@@ -1,37 +1,23 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "@/lib/api";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import UserForm, { UserFormValues } from "@/components/users/UserForm";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-
-export function newUserLoader() {
-  return null;
-}
+import { useCreateUser } from "@/hooks/useUserMutations";
 
 function UserCreate() {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const { mutateAsync: createUser, isPending, error } = useCreateUser();
 
   const handleSubmit = async ({ name, email, password, isAdmin, photo }: UserFormValues) => {
-    setError(null);
-    setLoading(true);
-    try {
-      const formData = new FormData();
-      formData.append("name", name);
-      formData.append("email", email);
-      formData.append("type", isAdmin ? "admin" : "user");
-      formData.append("password", password);
-      if (photo) formData.append("photo", photo);
-      await api.post("/users", formData);
-      navigate("/users");
-    } catch {
-      setError("Erro ao criar usuário.");
-    } finally {
-      setLoading(false);
-    }
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("email", email);
+    formData.append("type", isAdmin ? "admin" : "user");
+    formData.append("password", password);
+    if (photo) formData.append("photo", photo);
+    await createUser(formData);
+    navigate("/users");
   };
 
   return (
@@ -47,8 +33,8 @@ function UserCreate() {
             <UserForm
               isNew
               onSubmit={handleSubmit}
-              loading={loading}
-              error={error}
+              loading={isPending}
+              error={error ? "Erro ao criar usuário." : null}
               onCancel={() => navigate("/users")}
             />
           </CardContent>
