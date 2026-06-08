@@ -8,21 +8,18 @@ export const userKeys = {
   attachments: (id: number) => [...userKeys.all, id, 'attachments'] as const,
 };
 
-export async function fetchUsers(): Promise<User[]> {
-  const res = await api.get<User[]>('/users');
+type UserWithAttachmentsCount = User & { attachmentsCount: number };
+
+type UserWithAttachments = User & { attachments: UserAttachment[] };
+
+export async function fetchUsers(): Promise<UserWithAttachmentsCount[]> {
+  const res = await api.get<UserWithAttachmentsCount[]>('/users');
   const users = res.data;
-  const attachmentLists = await Promise.all(
-    users.map((u) =>
-      api.get<UserAttachment[]>(`/users/${u.id}/attachments`)
-        .then((r) => r.data)
-        .catch(() => [] as UserAttachment[])
-    )
-  );
-  return users.map((u, i) => ({ ...u, attachments: attachmentLists[i] }));
+  return users;
 }
 
-export async function fetchUser(id: number): Promise<User> {
-  const res = await api.get<User>(`/users/${id}`);
+export async function fetchUser(id: number): Promise<UserWithAttachments> {
+  const res = await api.get<UserWithAttachments>(`/users/${id}`);
   return res.data;
 }
 

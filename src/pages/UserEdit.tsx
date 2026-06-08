@@ -6,7 +6,6 @@ import UserForm, { UserFormValues } from "@/components/users/UserForm";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
 import { useUser } from "@/hooks/useUsers";
-import { useUserAttachments } from "@/hooks/useUserAttachments";
 import { useUpdateUser, useRemovePhoto, useDeleteAttachment, useUploadAttachments } from "@/hooks/useUserMutations";
 
 function UserEdit() {
@@ -15,7 +14,6 @@ function UserEdit() {
   const navigate = useNavigate();
 
   const { data: user, isLoading: userLoading } = useUser(id);
-  const { data: attachments = [], isLoading: attachmentsLoading } = useUserAttachments(id);
 
   const { mutateAsync: updateUser, isPending: saving, error: saveError } = useUpdateUser();
   const { mutateAsync: removePhoto } = useRemovePhoto();
@@ -51,7 +49,7 @@ function UserEdit() {
     });
   };
 
-  if (userLoading || attachmentsLoading) {
+  if (userLoading) {
     return (
       <div className="min-h-screen bg-background flex flex-col">
         <Header title="Editar Usuário" onBack={() => navigate("/users")} />
@@ -81,7 +79,7 @@ function UserEdit() {
                 email: user.email,
                 isAdmin: user.type === "admin",
                 photoPreview: user.previewUrl ?? null,
-                existingAttachments: attachments,
+                existingAttachments: user.attachments,
               }}
               onSubmit={handleSubmit}
               isNew={false}
