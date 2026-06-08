@@ -9,14 +9,8 @@ function UserCreate() {
   const navigate = useNavigate();
   const { mutateAsync: createUser, isPending, error } = useCreateUser();
 
-  const handleSubmit = async ({ name, email, password, isAdmin, photo }: UserFormValues) => {
-    const formData = new FormData();
-    formData.append("name", name);
-    formData.append("email", email);
-    formData.append("type", isAdmin ? "admin" : "user");
-    formData.append("password", password);
-    if (photo) formData.append("photo", photo);
-    await createUser(formData);
+  const handleSubmit = async (values: UserFormValues) => {
+    await createUser(values);
     navigate("/users");
   };
 

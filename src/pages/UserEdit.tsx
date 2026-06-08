@@ -23,14 +23,8 @@ function UserEdit() {
   const { mutateAsync: deleteAttachment } = useDeleteAttachment();
   const { mutateAsync: uploadAttachments } = useUploadAttachments();
 
-  const handleSubmit = async ({ name, email, password, isAdmin, photo, newAttachments }: UserFormValues) => {
-    const formData = new FormData();
-    formData.append("name", name);
-    formData.append("email", email);
-    formData.append("type", isAdmin ? "admin" : "user");
-    if (password) formData.append("password", password);
-    if (photo) formData.append("photo", photo);
-    await updateUser({ id, formData });
+  const handleSubmit = async ({ newAttachments, ...data }: UserFormValues) => {
+    await updateUser({ id, ...data });
 
     if (newAttachments.length > 0) {
       const attachmentData = new FormData();
