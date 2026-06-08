@@ -45,6 +45,7 @@ function UserCreate() {
           </CardHeader>
           <CardContent>
             <UserForm
+              isNew
               onSubmit={handleSubmit}
               loading={loading}
               error={error}

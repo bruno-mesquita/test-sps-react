@@ -88,7 +88,7 @@ function UserEdit() {
                 existingAttachments: user.attachments ?? [],
               }}
               onSubmit={handleSubmit}
-              userId={user.id}
+              isNew={false}
               loading={loading}
               error={error}
               onCancel={() => navigate("/users")}
