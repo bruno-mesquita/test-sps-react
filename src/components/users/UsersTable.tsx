@@ -11,11 +11,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { Pencil, Paperclip } from "lucide-react";
 import DeleteUserDialog from "./DeleteUserDialog";
+import PhotoDialog from "./PhotoDialog";
 
 interface UsersTableProps {
   users: User[];
@@ -101,17 +101,7 @@ function UsersTable({ users, onDelete }: UsersTableProps) {
         </Table>
       </div>
 
-      <Dialog open={photoUser !== null} onOpenChange={(open) => !open && setPhotoUser(null)}>
-        <DialogContent className="sm:max-w-lg">
-          {photoUser && (
-            <img
-              src={photoUser.originalUrl}
-              alt={photoUser.name}
-              className="w-full rounded-lg object-contain max-h-[70vh]"
-            />
-          )}
-        </DialogContent>
-      </Dialog>
+      <PhotoDialog user={photoUser} onClose={() => setPhotoUser(null)} />
     </>
   );
 }
