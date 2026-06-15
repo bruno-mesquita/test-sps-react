@@ -11,14 +11,16 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Trash2 } from "lucide-react";
+import { Trash2, Loader2 } from "lucide-react";
+import { useDeleteUser } from "@/hooks/useDeleteUser";
 
 interface DeleteUserDialogProps {
   user: User;
-  onDelete: (id: number) => void;
 }
 
-function DeleteUserDialog({ user, onDelete }: DeleteUserDialogProps) {
+function DeleteUserDialog({ user }: DeleteUserDialogProps) {
+  const { mutate: deleteUser, isPending, error } = useDeleteUser();
+
   return (
     <AlertDialog>
       <AlertDialogTrigger
@@ -41,10 +43,22 @@ function DeleteUserDialog({ user, onDelete }: DeleteUserDialogProps) {
             ser desfeita.
           </AlertDialogDescription>
         </AlertDialogHeader>
+        {error && (
+          <p className="px-6 text-sm text-destructive">
+            {error instanceof Error ? error.message : "Erro ao excluir usuário."}
+          </p>
+        )}
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancelar</AlertDialogCancel>
-          <AlertDialogAction onClick={() => onDelete(user.id)}>
-            Excluir
+          <AlertDialogCancel disabled={isPending}>Cancelar</AlertDialogCancel>
+          <AlertDialogAction onClick={() => deleteUser(user.id)} disabled={isPending}>
+            {isPending ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Excluindo...
+              </>
+            ) : (
+              "Excluir"
+            )}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

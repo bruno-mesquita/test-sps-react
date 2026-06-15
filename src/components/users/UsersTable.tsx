@@ -19,10 +19,9 @@ import PhotoDialog from "./PhotoDialog";
 
 interface UsersTableProps {
   users: User[];
-  onDelete: (id: number) => void;
 }
 
-function UsersTable({ users, onDelete }: UsersTableProps) {
+function UsersTable({ users }: UsersTableProps) {
   const [photoUser, setPhotoUser] = useState<User | null>(null);
 
   if (users.length === 0) {
@@ -92,7 +91,7 @@ function UsersTable({ users, onDelete }: UsersTableProps) {
                       <Pencil className="h-4 w-4" />
                       <span className="ml-1 hidden sm:inline">Editar</span>
                     </Link>
-                    <DeleteUserDialog user={user} onDelete={onDelete} />
+                    <DeleteUserDialog user={user} />
                   </div>
                 </TableCell>
               </TableRow>
