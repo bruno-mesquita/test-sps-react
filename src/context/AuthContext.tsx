@@ -1,9 +1,10 @@
 import React, { createContext, useCallback, useContext, useState } from "react";
+import axios from "axios";
 
 interface AuthContextType {
   token: string | null;
   isAuthenticated: boolean;
-  signIn: (token: string) => void;
+  signIn: (email: string, password: string) => Promise<void>;
   signOut: () => void;
 }
 
@@ -19,9 +20,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setToken(null);
   }, []);
 
-  const signIn = useCallback((newToken: string) => {
-    localStorage.setItem("token", newToken);
-    setToken(newToken);
+  const signIn = useCallback(async (email: string, password: string) => {
+    const response = await axios.post<{ token: string }>(
+      `${import.meta.env.VITE_SERVER_URL}/auth`,
+      { email, password },
+    );
+    localStorage.setItem("token", response.data.token);
+    setToken(response.data.token);
   }, []);
 
   return (
