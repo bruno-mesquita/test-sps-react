@@ -1,7 +1,7 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
 import { queryClient } from "./lib/queryClient";
-import { userKeys, fetchUser, fetchUserAttachments } from "./queries/users";
+import { userKeys, fetchUser } from "./queries/users";
 
 import Home from "./pages/Home";
 import SignIn from "./pages/SignIn";
@@ -18,10 +18,7 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 
 async function userEditLoader({ params }: { params: Record<string, string | undefined> }) {
   const id = Number(params.userId);
-  await Promise.all([
-    queryClient.prefetchQuery({ queryKey: userKeys.detail(id), queryFn: () => fetchUser(id) }),
-    queryClient.prefetchQuery({ queryKey: userKeys.attachments(id), queryFn: () => fetchUserAttachments(id) }),
-  ]);
+  await queryClient.prefetchQuery({ queryKey: userKeys.detail(id), queryFn: () => fetchUser(id) });
   return null;
 }
 

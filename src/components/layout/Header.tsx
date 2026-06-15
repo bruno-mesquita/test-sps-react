@@ -1,14 +1,13 @@
-import { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 
 interface HeaderProps {
   title: string;
   onBack?: () => void;
-  actions?: ReactNode;
+  actions?: React.ReactNode;
 }
 
-function Header({ title, onBack, actions }: HeaderProps) {
+export default function Header({ title, onBack, actions }: HeaderProps) {
   return (
     <header className="border-b bg-card">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
@@ -25,5 +24,3 @@ function Header({ title, onBack, actions }: HeaderProps) {
     </header>
   );
 }
-
-export default Header;
