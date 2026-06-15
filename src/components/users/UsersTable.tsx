@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { User } from "@/types";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import {
   Table,
@@ -11,21 +11,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { Pencil, Trash2, Paperclip } from "lucide-react";
+import { Pencil, Paperclip } from "lucide-react";
+import DeleteUserDialog from "./DeleteUserDialog";
 
 interface UsersTableProps {
   users: User[];
@@ -102,35 +92,7 @@ function UsersTable({ users, onDelete }: UsersTableProps) {
                       <Pencil className="h-4 w-4" />
                       <span className="ml-1 hidden sm:inline">Editar</span>
                     </Link>
-                    <AlertDialog>
-                      <AlertDialogTrigger
-                        render={
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="text-destructive hover:text-destructive"
-                          />
-                        }
-                      >
-                        <Trash2 className="h-4 w-4" />
-                        <span className="ml-1 hidden sm:inline">Excluir</span>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>Excluir usuário</AlertDialogTitle>
-                          <AlertDialogDescription>
-                            Deseja excluir <strong>{user.name}</strong>? Esta ação não pode
-                            ser desfeita.
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                          <AlertDialogAction onClick={() => onDelete(user.id)}>
-                            Excluir
-                          </AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
+                    <DeleteUserDialog user={user} onDelete={onDelete} />
                   </div>
                 </TableCell>
               </TableRow>
