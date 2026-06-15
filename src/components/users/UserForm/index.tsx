@@ -182,18 +182,16 @@ function UserForm({
         )}
       </div>
 
-      {!isNew && (
-        <AttachmentsSection
-          existingAttachments={existingAttachments}
-          newAttachments={newAttachments}
-          onAddFiles={(files) => setNewAttachments((prev) => [...prev, ...files])}
-          onRemoveNew={(index) =>
-            setNewAttachments((prev) => prev.filter((_, i) => i !== index))
-          }
-          onDeleteExisting={handleDeleteExisting}
-          onNavigate={onNavigateToAttachment}
-        />
-      )}
+      <AttachmentsSection
+        existingAttachments={existingAttachments}
+        newAttachments={newAttachments}
+        onAddFiles={(files) => setNewAttachments((prev) => [...prev, ...files])}
+        onRemoveNew={(index) =>
+          setNewAttachments((prev) => prev.filter((_, i) => i !== index))
+        }
+        onDeleteExisting={handleDeleteExisting}
+        onNavigate={onNavigateToAttachment}
+      />
 
       <div className="flex items-center gap-2">
         <Controller
