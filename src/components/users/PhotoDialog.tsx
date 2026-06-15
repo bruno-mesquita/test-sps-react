@@ -1,19 +1,19 @@
-import { User } from "@/types";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 interface PhotoDialogProps {
-  user: User | null;
+  src: string | null;
+  alt: string;
   onClose: () => void;
 }
 
-function PhotoDialog({ user, onClose }: PhotoDialogProps) {
+function PhotoDialog({ src, alt, onClose }: PhotoDialogProps) {
   return (
-    <Dialog open={user !== null} onOpenChange={(open) => !open && onClose()}>
+    <Dialog open={src !== null} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-lg">
-        {user && (
+        {src && (
           <img
-            src={user.originalUrl}
-            alt={user.name}
+            src={src}
+            alt={alt}
             className="w-full rounded-lg object-contain max-h-[70vh]"
           />
         )}

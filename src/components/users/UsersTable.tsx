@@ -100,7 +100,7 @@ function UsersTable({ users }: UsersTableProps) {
         </Table>
       </div>
 
-      <PhotoDialog user={photoUser} onClose={() => setPhotoUser(null)} />
+      <PhotoDialog src={photoUser?.originalUrl ?? null} alt={photoUser?.name ?? ""} onClose={() => setPhotoUser(null)} />
     </>
   );
 }
