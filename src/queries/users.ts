@@ -8,7 +8,7 @@ export const userKeys = {
   attachments: (id: string) => [...userKeys.all, id, 'attachments'] as const,
 };
 
-type UserWithAttachmentsCount = User & { attachmentsCount: number };
+export type UserWithAttachmentsCount = User & { attachmentCount: number };
 
 type UserWithAttachments = User & { attachments: UserAttachment[] };
 

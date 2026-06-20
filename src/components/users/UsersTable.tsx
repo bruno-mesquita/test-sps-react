@@ -16,11 +16,10 @@ import { cn } from "@/lib/utils";
 import { Pencil, Paperclip } from "lucide-react";
 import DeleteUserDialog from "./DeleteUserDialog";
 import PhotoDialog from "./PhotoDialog";
-
-type UserTable = Omit<User, 'attachments'> & { attachmentCount: number }
+import type { UserWithAttachmentsCount } from "@/queries/users";
 
 interface UsersTableProps {
-  users: UserTable[];
+  users: UserWithAttachmentsCount[];
 }
 
 function UsersTable({ users }: UsersTableProps) {

@@ -8,8 +8,6 @@ import { Loader2 } from "lucide-react";
 import { useUser } from "@/hooks/useUsers";
 import { useUpdateUser } from "@/hooks/useUpdateUser";
 import { useRemovePhoto } from "@/hooks/useRemovePhoto";
-import { useDeleteAttachment } from "@/hooks/useDeleteAttachment";
-import { useUploadAttachments } from "@/hooks/useUploadAttachments";
 
 function UserEdit() {
   const { userId } = useParams<{ userId: string }>();
@@ -19,25 +17,13 @@ function UserEdit() {
 
   const { mutateAsync: updateUser, isPending: saving, error: saveError } = useUpdateUser();
   const { mutateAsync: removePhoto } = useRemovePhoto();
-  const { mutateAsync: deleteAttachment } = useDeleteAttachment();
-  const { mutateAsync: uploadAttachments } = useUploadAttachments();
 
-  const handleSubmit = async ({ newAttachments, ...data }: UserFormValues) => {
+  const handleSubmit = async (data: UserFormValues) => {
     await updateUser({ id: userId!, ...data });
-
-    if (newAttachments.length > 0) {
-      const attachmentData = new FormData();
-      newAttachments.forEach((file) => attachmentData.append("files", file));
-      await uploadAttachments({ userId: userId!, formData: attachmentData });
-    }
-
     navigate("/users");
   };
 
   const handleRemovePhoto = () => removePhoto(userId!);
-
-  const handleDeleteAttachment = (attachmentId: string) =>
-    deleteAttachment({ userId: userId!, attachmentId });
 
   const handleNavigateToAttachment = (att: UserAttachment) => {
     navigate(`/users/${userId}/attachments/${att.id}`, {
@@ -83,7 +69,6 @@ function UserEdit() {
               error={saveError ? "Erro ao salvar usuário." : null}
               onCancel={() => navigate("/users")}
               onRemovePhoto={handleRemovePhoto}
-              onDeleteAttachment={handleDeleteAttachment}
               onNavigateToAttachment={handleNavigateToAttachment}
             />
           </CardContent>

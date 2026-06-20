@@ -6,7 +6,7 @@ import { userKeys } from '@/queries/users';
 export function useDeleteUser() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (id: number) => api.delete(`/users/${id}`),
+    mutationFn: (id: string) => api.delete(`/users/${id}`),
     onMutate: async (id) => {
       await queryClient.cancelQueries({ queryKey: userKeys.lists() });
       const previous = queryClient.getQueryData<User[]>(userKeys.lists());

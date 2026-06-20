@@ -36,6 +36,7 @@ export interface UserFormValues {
   isAdmin: boolean;
   photo: File | null;
   newAttachments: File[];
+  removeAttachmentIds: string[];
 }
 
 interface UserFormProps {
@@ -52,7 +53,6 @@ interface UserFormProps {
   error?: string | null;
   onCancel?: () => void;
   onRemovePhoto?: () => Promise<unknown>;
-  onDeleteAttachment?: (id: string) => Promise<unknown>;
   onNavigateToAttachment?: (att: UserAttachment) => void;
 }
 
@@ -64,7 +64,6 @@ function UserForm({
   error,
   onCancel,
   onRemovePhoto,
-  onDeleteAttachment,
   onNavigateToAttachment,
 }: UserFormProps) {
   const {
@@ -89,6 +88,7 @@ function UserForm({
     defaultValues?.photoPreview ?? null
   );
   const [newAttachments, setNewAttachments] = useState<File[]>([]);
+  const [removedAttachmentIds, setRemovedAttachmentIds] = useState<string[]>([]);
   const [existingAttachments, setExistingAttachments] = useState<UserAttachment[]>(
     defaultValues?.existingAttachments ?? []
   );
@@ -105,8 +105,8 @@ function UserForm({
     setPhotoPreview(null);
   };
 
-  const handleDeleteExisting = async (att: UserAttachment) => {
-    await onDeleteAttachment?.(att.id);
+  const handleDeleteExisting = (att: UserAttachment) => {
+    setRemovedAttachmentIds((prev) => [...prev, att.id]);
     setExistingAttachments((prev) => prev.filter((a) => a.id !== att.id));
   };
 
@@ -118,6 +118,7 @@ function UserForm({
       isAdmin: fields.isAdmin,
       photo,
       newAttachments,
+      removeAttachmentIds: removedAttachmentIds,
     });
   };
 
