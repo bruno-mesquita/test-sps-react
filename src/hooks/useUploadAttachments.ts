@@ -5,7 +5,7 @@ import { userKeys } from '@/queries/users';
 export function useUploadAttachments() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ userId, formData }: { userId: number; formData: FormData }) =>
+    mutationFn: ({ userId, formData }: { userId: string ; formData: FormData }) =>
       api.post(`/users/${userId}/attachments`, formData),
     onSuccess: (_data, { userId }) => {
       queryClient.invalidateQueries({ queryKey: userKeys.attachments(userId) });

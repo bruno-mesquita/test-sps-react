@@ -4,8 +4,8 @@ import { User, UserAttachment } from '@/types';
 export const userKeys = {
   all: ['users'] as const,
   lists: () => [...userKeys.all, 'list'] as const,
-  detail: (id: number) => [...userKeys.all, 'detail', id] as const,
-  attachments: (id: number) => [...userKeys.all, id, 'attachments'] as const,
+  detail: (id: string) => [...userKeys.all, 'detail', id] as const,
+  attachments: (id: string) => [...userKeys.all, id, 'attachments'] as const,
 };
 
 type UserWithAttachmentsCount = User & { attachmentsCount: number };
@@ -18,12 +18,12 @@ export async function fetchUsers(): Promise<UserWithAttachmentsCount[]> {
   return users;
 }
 
-export async function fetchUser(id: number): Promise<UserWithAttachments> {
+export async function fetchUser(id: string): Promise<UserWithAttachments> {
   const res = await api.get<UserWithAttachments>(`/users/${id}`);
   return res.data;
 }
 
-export async function fetchUserAttachments(id: number): Promise<UserAttachment[]> {
+export async function fetchUserAttachments(id: string): Promise<UserAttachment[]> {
   const res = await api.get<UserAttachment[]>(`/users/${id}/attachments`);
   return res.data;
 }

@@ -52,7 +52,7 @@ interface UserFormProps {
   error?: string | null;
   onCancel?: () => void;
   onRemovePhoto?: () => Promise<unknown>;
-  onDeleteAttachment?: (id: number) => Promise<unknown>;
+  onDeleteAttachment?: (id: string) => Promise<unknown>;
   onNavigateToAttachment?: (att: UserAttachment) => void;
 }
 
@@ -68,7 +68,6 @@ function UserForm({
   onNavigateToAttachment,
 }: UserFormProps) {
   const {
-    register,
     handleSubmit,
     control,
     watch,
@@ -107,7 +106,7 @@ function UserForm({
   };
 
   const handleDeleteExisting = async (att: UserAttachment) => {
-    await onDeleteAttachment?.(att.id as number);
+    await onDeleteAttachment?.(att.id);
     setExistingAttachments((prev) => prev.filter((a) => a.id !== att.id));
   };
 
@@ -140,11 +139,17 @@ function UserForm({
 
       <div className="space-y-2">
         <Label htmlFor="name">Nome</Label>
-        <Input
-          id="name"
-          type="text"
-          placeholder="Nome completo"
-          {...register("name")}
+        <Controller
+          name="name"
+          control={control}
+          render={({ field }) => (
+            <Input
+              id="name"
+              type="text"
+              placeholder="Nome completo"
+              {...field}
+            />
+          )}
         />
         {errors.name && (
           <p className="text-xs text-destructive">{errors.name.message}</p>
@@ -153,11 +158,17 @@ function UserForm({
 
       <div className="space-y-2">
         <Label htmlFor="email">Email</Label>
-        <Input
-          id="email"
-          type="email"
-          placeholder="email@exemplo.com"
-          {...register("email")}
+        <Controller
+          name="email"
+          control={control}
+          render={({ field }) => (
+            <Input
+              id="email"
+              type="email"
+              placeholder="email@exemplo.com"
+              {...field}
+            />
+          )}
         />
         {errors.email && (
           <p className="text-xs text-destructive">{errors.email.message}</p>
@@ -171,11 +182,17 @@ function UserForm({
             <span className="text-muted-foreground text-xs ml-1">(deixe em branco para manter)</span>
           )}
         </Label>
-        <Input
-          id="password"
-          type="password"
-          placeholder="••••••••"
-          {...register("password")}
+        <Controller
+          name="password"
+          control={control}
+          render={({ field }) => (
+            <Input
+              id="password"
+              type="password"
+              placeholder="••••••••"
+              {...field}
+            />
+          )}
         />
         {errors.password && (
           <p className="text-xs text-destructive">{errors.password.message}</p>

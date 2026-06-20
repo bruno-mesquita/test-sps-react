@@ -6,7 +6,7 @@ import { userKeys } from '@/queries/users';
 export function useRemovePhoto() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (userId: number) => api.delete(`/users/${userId}/photo`),
+    mutationFn: (userId: string) => api.delete(`/users/${userId}/photo`),
     onMutate: async (userId) => {
       await queryClient.cancelQueries({ queryKey: userKeys.detail(userId) });
       const previous = queryClient.getQueryData<User>(userKeys.detail(userId));

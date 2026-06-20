@@ -4,7 +4,7 @@ import { User } from '@/types';
 import { userKeys } from '@/queries/users';
 import { UserFormValues } from '@/components/users/UserForm';
 
-type UpdateUserInput = { id: number } & Omit<UserFormValues, 'newAttachments'>;
+type UpdateUserInput = { id: string  } & Omit<UserFormValues, 'newAttachments'>;
 
 export function useUpdateUser() {
   const queryClient = useQueryClient();

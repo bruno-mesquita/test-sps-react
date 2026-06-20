@@ -17,7 +17,7 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 }
 
 async function userEditLoader({ params }: { params: Record<string, string | undefined> }) {
-  const id = Number(params.userId);
+  const id = params.userId!;
   await queryClient.prefetchQuery({ queryKey: userKeys.detail(id), queryFn: () => fetchUser(id) });
   return null;
 }

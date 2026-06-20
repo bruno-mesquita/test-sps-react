@@ -1,11 +1,11 @@
 export interface UserAttachment {
-  id: number
+  id: string
   filename: string
   url: string
 }
 
 export interface User {
-  id: number
+  id: string
   name: string
   email: string
   type: 'admin' | 'user'

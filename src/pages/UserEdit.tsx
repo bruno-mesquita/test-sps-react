@@ -13,10 +13,9 @@ import { useUploadAttachments } from "@/hooks/useUploadAttachments";
 
 function UserEdit() {
   const { userId } = useParams<{ userId: string }>();
-  const id = Number(userId);
   const navigate = useNavigate();
 
-  const { data: user, isLoading: userLoading } = useUser(id);
+  const { data: user, isLoading: userLoading } = useUser(userId!);
 
   const { mutateAsync: updateUser, isPending: saving, error: saveError } = useUpdateUser();
   const { mutateAsync: removePhoto } = useRemovePhoto();
@@ -24,24 +23,24 @@ function UserEdit() {
   const { mutateAsync: uploadAttachments } = useUploadAttachments();
 
   const handleSubmit = async ({ newAttachments, ...data }: UserFormValues) => {
-    await updateUser({ id, ...data });
+    await updateUser({ id: userId!, ...data });
 
     if (newAttachments.length > 0) {
       const attachmentData = new FormData();
       newAttachments.forEach((file) => attachmentData.append("files", file));
-      await uploadAttachments({ userId: id, formData: attachmentData });
+      await uploadAttachments({ userId: userId!, formData: attachmentData });
     }
 
     navigate("/users");
   };
 
-  const handleRemovePhoto = () => removePhoto(id);
+  const handleRemovePhoto = () => removePhoto(userId!);
 
-  const handleDeleteAttachment = (attachmentId: number) =>
-    deleteAttachment({ userId: id, attachmentId });
+  const handleDeleteAttachment = (attachmentId: string) =>
+    deleteAttachment({ userId: userId!, attachmentId });
 
   const handleNavigateToAttachment = (att: UserAttachment) => {
-    navigate(`/users/${id}/attachments/${att.id}`, {
+    navigate(`/users/${userId}/attachments/${att.id}`, {
       state: { filename: att.filename, url: att.url },
     });
   };

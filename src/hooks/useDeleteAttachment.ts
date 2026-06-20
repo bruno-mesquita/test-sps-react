@@ -6,7 +6,7 @@ import { userKeys } from '@/queries/users';
 export function useDeleteAttachment() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ userId, attachmentId }: { userId: number; attachmentId: number }) =>
+    mutationFn: ({ userId, attachmentId }: { userId: string; attachmentId: string }) =>
       api.delete(`/users/${userId}/attachments/${attachmentId}`),
     onMutate: async ({ userId, attachmentId }) => {
       await queryClient.cancelQueries({ queryKey: userKeys.attachments(userId) });
