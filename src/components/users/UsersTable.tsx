@@ -17,8 +17,10 @@ import { Pencil, Paperclip } from "lucide-react";
 import DeleteUserDialog from "./DeleteUserDialog";
 import PhotoDialog from "./PhotoDialog";
 
+type UserTable = Omit<User, 'attachments'> & { attachmentCount: number }
+
 interface UsersTableProps {
-  users: User[];
+  users: UserTable[];
 }
 
 function UsersTable({ users }: UsersTableProps) {
@@ -75,10 +77,10 @@ function UsersTable({ users }: UsersTableProps) {
                   </Badge>
                 </TableCell>
                 <TableCell>
-                  {(user.attachments?.length ?? 0) > 0 && (
+                  {user.attachmentCount > 0 && (
                     <span className="flex items-center gap-1 text-sm text-muted-foreground">
                       <Paperclip className="h-3 w-3" />
-                      {user.attachments!.length}
+                      {user.attachmentCount}
                     </span>
                   )}
                 </TableCell>
