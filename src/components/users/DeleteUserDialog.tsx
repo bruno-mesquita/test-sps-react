@@ -1,4 +1,3 @@
-import { User } from "@/types";
 import { Button } from "@/components/ui/button";
 import {
   AlertDialog,
@@ -15,10 +14,11 @@ import { Trash2, Loader2 } from "lucide-react";
 import { useDeleteUser } from "@/hooks/useDeleteUser";
 
 interface DeleteUserDialogProps {
-  user: User;
+  username: string;
+  userId: string;
 }
 
-function DeleteUserDialog({ user }: DeleteUserDialogProps) {
+function DeleteUserDialog({ userId, username }: DeleteUserDialogProps) {
   const { mutate: deleteUser, isPending, error } = useDeleteUser();
 
   return (
@@ -39,7 +39,7 @@ function DeleteUserDialog({ user }: DeleteUserDialogProps) {
         <AlertDialogHeader>
           <AlertDialogTitle>Excluir usuário</AlertDialogTitle>
           <AlertDialogDescription>
-            Deseja excluir <strong>{user.name}</strong>? Esta ação não pode
+            Deseja excluir <strong>{username}</strong>? Esta ação não pode
             ser desfeita.
           </AlertDialogDescription>
         </AlertDialogHeader>
@@ -50,7 +50,7 @@ function DeleteUserDialog({ user }: DeleteUserDialogProps) {
         )}
         <AlertDialogFooter>
           <AlertDialogCancel disabled={isPending}>Cancelar</AlertDialogCancel>
-          <AlertDialogAction onClick={() => deleteUser(user.id)} disabled={isPending}>
+          <AlertDialogAction onClick={() => deleteUser(userId)} disabled={isPending}>
             {isPending ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />

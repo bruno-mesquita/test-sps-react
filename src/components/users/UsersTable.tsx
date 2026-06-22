@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { User } from "@/types";
 import { buttonVariants } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import {
@@ -22,8 +21,10 @@ interface UsersTableProps {
   users: UserWithAttachmentsCount[];
 }
 
+type PhotoUser = { src: string; alt:  string; }
+
 function UsersTable({ users }: UsersTableProps) {
-  const [photoUser, setPhotoUser] = useState<User | null>(null);
+  const [photoUser, setPhotoUser] = useState<PhotoUser | null>(null);
 
   if (users.length === 0) {
     return (
@@ -53,7 +54,7 @@ function UsersTable({ users }: UsersTableProps) {
                 <TableCell>
                   <button
                     type="button"
-                    onClick={() => user.originalUrl && setPhotoUser(user)}
+                    onClick={() => user.originalUrl && setPhotoUser({ src: user.originalUrl, alt: user.name })}
                     className={cn(
                       "focus:outline-none",
                       user.originalUrl && "cursor-pointer"
@@ -92,7 +93,7 @@ function UsersTable({ users }: UsersTableProps) {
                       <Pencil className="h-4 w-4" />
                       <span className="ml-1 hidden sm:inline">Editar</span>
                     </Link>
-                    <DeleteUserDialog user={user} />
+                    <DeleteUserDialog userId={user.id} username={user.name} />
                   </div>
                 </TableCell>
               </TableRow>
@@ -101,7 +102,7 @@ function UsersTable({ users }: UsersTableProps) {
         </Table>
       </div>
 
-      <PhotoDialog src={photoUser?.originalUrl ?? null} alt={photoUser?.name ?? ""} onClose={() => setPhotoUser(null)} />
+      <PhotoDialog src={photoUser?.src ?? null} alt={photoUser?.alt ?? ""} onClose={() => setPhotoUser(null)} />
     </>
   );
 }
